@@ -1,7 +1,7 @@
-# piyo
+# 🐣 piyo
 esa API v1 client library, written in Python
 
-**this project is work in progress**
+**this project is work in progress.**
 
 **currently,  available endpoint is partial.**
 
@@ -24,7 +24,7 @@ client.user
 #=> GET /v1/user
 
 client.team
-#=> GET /v1/teams
+#=> GET /v1/team
 
 client.team('<team_name>')
 #=> GET /v1/teams/team_name
@@ -34,4 +34,18 @@ client.stats
 
 ...
 
+```
+
+### Development
+
+issues and pull requests are always welcome!
+
+run test
+
+``` shell
+sh scripts/run_tests.sh
+```
+or directly
+``` shell
+python3 tests/<test_file>.py -v
 ```
