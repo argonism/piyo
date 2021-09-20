@@ -5,7 +5,7 @@ esa API v1 client library, written in Python
 
 **currently,  available endpoint is partial.**
 
-### installation
+### Installation
 
 install this library using pip
 ``` shell
@@ -23,8 +23,8 @@ client = Client(access_token='<access_token>', current_team='<team_name>')
 client.user
 #=> GET /v1/user
 
-client.team
-#=> GET /v1/team
+client.teams
+#=> GET /v1/teams
 
 client.team('<team_name>')
 #=> GET /v1/teams/team_name
