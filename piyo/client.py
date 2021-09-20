@@ -36,8 +36,9 @@ class Client(object):
             raise PiyoException(
                 status_code,
                 reason,
-                -1,
+                -100,
             )
+
         return results
     
     @property
