@@ -24,7 +24,7 @@ setup(
 
     description='esa API v1 client library, written in python',
     long_description=readme(),
-    long_description_content_type='text/markdown'
+    long_description_content_type='text/markdown',
     keywords='esa api client esa.io python',
 
     classifiers=[
