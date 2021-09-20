@@ -1,6 +1,9 @@
 # piyo
 esa API v1 client library, written in Python
 
+**this project is work in progress**
+**currently,  available endpoint is partial.**
+
 ### installation
 
 install this library using pip
@@ -13,7 +16,7 @@ pip install piyo
 ``` python
 from piyo import Client
 
-client = Client(access_token="<access_token>", current_team='<team_name>')
+client = Client(access_token='<access_token>', current_team='<team_name>')
 # Client will look up environment variables  access token
 
 client.user
@@ -22,7 +25,7 @@ client.user
 client.team
 #=> GET /v1/teams
 
-client.team("<team_name>")
+client.team('<team_name>')
 #=> GET /v1/teams/team_name
 
 client.stats
