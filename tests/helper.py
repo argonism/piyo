@@ -1,8 +1,9 @@
-import os, sys, json
+import os, sys, json, time
 from http.server import SimpleHTTPRequestHandler
 import socketserver
 from threading import Thread
 from enum import Enum, auto
+from piyo import Client
 
 def load_env():
     with open(".env") as f:
@@ -22,6 +23,41 @@ def get_stub_json(stub_name):
     with open(path) as f:
         return json.load(f)
 
+class TestClient():
+    def __init__(self, port, team="docs", api_endpoint="http://localhost"):
+        load_env()
+        self.port = port
+        self.current_team = team
+        self.api_endpoint = "{0}:{1}".format(api_endpoint, port)
+        TestClient._instance = Client(current_team=self.current_team, api_endpoint=self.api_endpoint)
+
+    @classmethod
+    def get_instance(cls, *args, **kwargs):
+        return cls._instance if hasattr(cls, "_instance") else None
+    
+    # @classmethod
+    # def set_instance(cls, *args, **kwargs):
+    #     cls._instance = Client(*args, **kwargs)
+    
+    def start_server(self, timeout=3):
+        self.server_thd = StubServer(self.port)
+        self.server_thd.start()
+        timeout = 3
+        elasped = 0
+        wait_time = 0.1
+        while self.server_thd.status == StubServerStatus.NotBind:
+            if elasped >= timeout:
+                print("set up server timed out.")
+                return False
+            time.sleep(wait_time)
+            elasped += wait_time
+        return self.server_thd.status == StubServerStatus.Established
+
+    def stop_server(self):
+        self.server_thd.shutdown()
+
+
+
 class StubHTTPRequestHandler(SimpleHTTPRequestHandler):
     def __init__(self, *args, directory=None, **kwargs):
         tests_dir = get_script_dir()
@@ -37,7 +73,7 @@ class StubHTTPRequestHandler(SimpleHTTPRequestHandler):
 
     def do_GET(self):
         self.path = self.path_to_filename()
-        print("self.path:", self.path)
+        # print("self.path:", self.path)
         f = self.send_head()
         if f:
             try:
@@ -75,7 +111,7 @@ class StubServer(Thread):
                 self.status = StubServerStatus.Established
                 httpd.serve_forever()
         except OSError as err:
-            print("failed to start stub server")
+            print("failed to start stub server:", err)
             self.status = StubServerStatus.Failed
 
     def shutdown(self):

@@ -40,12 +40,14 @@ client.stats
 
 issues and pull requests are always welcome!
 
-run test
+run integration test
 
 ``` shell
-sh scripts/run_tests.sh
+python3 tests/integration_test.py
 ```
-or directly
+
+run unit test
+
 ``` shell
 python3 tests/<test_file>.py -v
 ```
