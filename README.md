@@ -5,14 +5,14 @@ esa API v1 client library, written in Python
 
 **currently,  available endpoint is partial.**
 
-### Installation
+## Installation
 
 install this library using pip
 ``` shell
 pip install piyo
 ```
 
-### Usage
+## Usage
 
 ``` python
 from piyo import Client
@@ -36,7 +36,7 @@ client.stats
 
 ```
 
-### Development
+## Development
 
 issues and pull requests are always welcome!
 
