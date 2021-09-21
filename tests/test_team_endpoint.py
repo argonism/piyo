@@ -7,51 +7,42 @@ sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 from piyo import Client
 import unittest
 
-from helper import StubServer, StubServerStatus
-
-
+from helper import StubServer, StubServerStatus, get_stub_json, load_env
 
 class TestGetEndpoints(unittest.TestCase):
-    def _load_env(self):
-        with open(".env") as f:
-            for line in f:
-                field, value = line.strip().split("=")
-                os.environ[field] = value
-
     def setUp(self):
-        self._load_env()
+        load_env()
         self.current_team = "docs"
         self.endpoint = "http://localhost:{0}".format(port)
         self.client = Client(current_team=self.current_team, api_endpoint=self.endpoint)
     
     def test_teams(self):
+        stub_name = "get_teams"
         response = self.client.teams()
+        expected = get_stub_json(stub_name)
         self.assertTrue("teams" in response)
+        self.assertEqual(response, expected)
 
-    # def test_team(self):
-    #     response = self.client.team()
-    #     self.assertTrue("name" in response)
+    def test_team(self):
+        stub_name = "get_team"
+        response = self.client.team()
+        expected = get_stub_json(stub_name)
+        self.assertTrue("name" in response)
+        self.assertEqual(response, expected)
 
-    # def test_stats(self):
-    #     response = self.client.stats()
-    #     self.assertTrue("members" in response)
+    def test_stats(self):
+        response = self.client.stats()
+        stub_name = "get_stats"
+        expected = get_stub_json(stub_name)
+        self.assertTrue("members" in response)
+        self.assertEqual(response, expected)
 
-    # def test_members(self):
-    #     response = self.client.members()
-    #     self.assertTrue("members" in response)
-
-    # def test_posts(self):
-    #     response = self.client.posts()
-    #     self.assertTrue("posts" in response)
-
-    # def test_post(self):
-    #     post_number = 1
-    #     response = self.client.post(post_number)
-    #     self.assertTrue("posts" in response)
-
-    # def test_comments_with_post_number(self):
-    #     response = self.client.posts()
-    #     self.assertTrue("posts" in response)
+    def test_members(self):
+        stub_name = "get_members"
+        response = self.client.members()
+        expected = get_stub_json(stub_name)
+        self.assertTrue("members" in response)
+        self.assertEqual(response, expected)
 
 if __name__ == '__main__':
     port = 8800

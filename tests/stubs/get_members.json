@@ -1,0 +1,32 @@
+{
+    "members": [
+      {
+        "myself": true,
+        "name": "Atsuo Fukaya",
+        "screen_name": "fukayatsu",
+        "icon": "https://img.esa.io/uploads/production/users/1/icon/thumb_m_402685a258cf2a33c1d6c13a89adec92.png",
+        "role": "owner",
+        "posts_count": 222,
+        "joined_at": "2014-07-01T08:10:55+09:00",
+        "last_accessed_at": "2019-12-27T16:23:23+09:00",
+        "email": "fukayatsu@esa.io",
+      },
+      {
+        "myself": false,
+        "name": "TAEKO AKATSUKA",
+        "screen_name": "taea",
+        "icon": "https://img.esa.io/uploads/production/users/2/icon/thumb_m_2690997f07b7de3014a36d90827603d6.jpg",
+        "role": "owner",
+        "posts_count": 111,
+        "joined_at": "2014-07-01T08:19:26+09:00",
+        "last_accessed_at": "2019-08-13T18:07:24+09:00",
+        "email": "taea@esa.io",
+      }
+    ],
+    "prev_page": null,
+    "next_page": null,
+    "total_count": 2,
+    "page": 1,
+    "per_page": 20,
+    "max_per_page": 100
+}

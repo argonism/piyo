@@ -1,19 +1,30 @@
-import os, sys
+import os, sys, json
 from http.server import SimpleHTTPRequestHandler
 import socketserver
 from threading import Thread
 from enum import Enum, auto
 
-class ServerSetupTimeoutError(Exception):
-    def __str__(self):
-        return "ServerSetupTimeoutError: starting server timed out."
+def load_env(self):
+    with open(".env") as f:
+        for line in f:
+            field, value = line.strip().split("=")
+            os.environ[field] = value
 
+
+def get_script_dir():
+    script_path = __file__ if "__file__" in globals() \
+                            else os.path.abspath(sys.argv[0])
+    return os.path.dirname(script_path)
+
+
+def get_stub_json(stub_name):
+    path = os.path.join(get_script_dir(), "stubs", stub_name + ".json")
+    with open(path) as f:
+        return json.load(f)
 
 class StubHTTPRequestHandler(SimpleHTTPRequestHandler):
     def __init__(self, *args, directory=None, **kwargs):
-        script_path = __file__ if "__file__" in globals() \
-                               else os.path.abspath(sys.argv[0])
-        tests_dir = os.path.dirname(script_path)
+        tests_dir = get_script_dir()
 
         stubs_path = os.path.join(tests_dir, "stubs")
         super().__init__(*args, directory=stubs_path, **kwargs)
