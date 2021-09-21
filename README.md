@@ -20,17 +20,38 @@ from piyo import Client
 client = Client(access_token='<access_token>', current_team='<team_name>')
 # Client will look up environment variables  access token
 
-client.user
+client.user()
 #=> GET /v1/user
 
-client.teams
+client.teams()
 #=> GET /v1/teams
 
-client.team('<team_name>')
-#=> GET /v1/teams/team_name
+client.team()
+#=> GET /v1/teams/<team_name>
 
-client.stats
-#=> GET /v1/teams/bar/stats
+client.stats()
+#=> GET /v1/teams/<team_name>/stats
+
+client.members()
+#=> GET /v1/teams/<team_name>/members
+
+client.posts()
+#=> GET /v1/teams/<team_name>/posts
+
+client.post(1)
+#=> GET /v1/teams/<team_name>/posts/1
+
+client.comments()
+#=> GET /v1/teams/<team_name>/comments
+
+client.comments(1)
+#=> GET /v1/teams/<team_name>/posts/1/comments
+
+client.comment(1)
+#=> GET /v1/teams/<team_name>/comments/1
+
+client.stargazers(1)
+#=> GET /v1/teams/<team_name>/posts/1/stargazers
 
 ...
 

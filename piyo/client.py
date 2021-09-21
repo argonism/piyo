@@ -94,6 +94,39 @@ class Client(object):
         path = "/v1/teams/{0}/comments/{1}".format(self.current_team, comment_id)
         return self._request(RequestMethod.GET, path, params, headers)
 
+    @team_required
+    def post_stargazers(self, post_number, params={}, headers={}):
+        path = "/v1/teams/{0}/posts/{1}/stargazers".format(self.current_team, post_number)
+        return self._request(RequestMethod.GET, path, params, headers)
+
+    @team_required
+    def comment_stargazers(self, comment_id, params={}, headers={}):
+        path = "/v1/teams/{0}/comments/{1}/stargazers".format(self.current_team, comment_id)
+        return self._request(RequestMethod.GET, path, params, headers)
+
+    @team_required
+    def watchers(self, post_number, params={}, headers={}):
+        path = "/v1/teams/{0}/posts/{1}/watchers".format(self.current_team, post_number)
+        return self._request(RequestMethod.GET, path, params, headers)
+
+    @team_required
+    def invitation(self, params={}, headers={}):
+        path = "/v1/teams/{0}/invitation".format(self.current_team)
+        return self._request(RequestMethod.GET, path, params, headers)
+
+    @team_required
+    def invitations(self, params={}, headers={}):
+        path = "/v1/teams/{0}/invitations".format(self.current_team)
+        return self._request(RequestMethod.GET, path, params, headers)
+
+    @team_required
+    def emojis(self, params={}, headers={}):
+        path = "/v1/teams/{0}/emojis".format(self.current_team)
+        return self._request(RequestMethod.GET, path, params, headers)
+
+    def user(self, params={}, headers={}):
+        path = "/v1/user"
+        return self._request(RequestMethod.GET, path, params, headers)
 
 
 if __name__ == "__main__":
