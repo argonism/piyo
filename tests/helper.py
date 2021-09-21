@@ -4,7 +4,7 @@ import socketserver
 from threading import Thread
 from enum import Enum, auto
 
-def load_env(self):
+def load_env():
     with open(".env") as f:
         for line in f:
             field, value = line.strip().split("=")
@@ -35,9 +35,9 @@ class StubHTTPRequestHandler(SimpleHTTPRequestHandler):
         stub_name = "{0}_{1}.json".format(self.command.lower(), stub_suffix)
         return stub_name
 
-
     def do_GET(self):
         self.path = self.path_to_filename()
+        print("self.path:", self.path)
         f = self.send_head()
         if f:
             try:

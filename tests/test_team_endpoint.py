@@ -24,7 +24,7 @@ class TestGetEndpoints(unittest.TestCase):
         self.assertEqual(response, expected)
 
     def test_team(self):
-        stub_name = "get_team"
+        stub_name = "get_teams_{0}".format(self.current_team)
         response = self.client.team()
         expected = get_stub_json(stub_name)
         self.assertTrue("name" in response)
@@ -32,13 +32,13 @@ class TestGetEndpoints(unittest.TestCase):
 
     def test_stats(self):
         response = self.client.stats()
-        stub_name = "get_stats"
+        stub_name = "get_teams_{0}_stats".format(self.current_team)
         expected = get_stub_json(stub_name)
         self.assertTrue("members" in response)
         self.assertEqual(response, expected)
 
     def test_members(self):
-        stub_name = "get_members"
+        stub_name = "get_teams_{0}_members".format(self.current_team)
         response = self.client.members()
         expected = get_stub_json(stub_name)
         self.assertTrue("members" in response)
