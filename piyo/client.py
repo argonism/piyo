@@ -1,6 +1,6 @@
 import requests, os
 from enum import Enum, auto
-from .error import PiyoException
+from .error import PiyoException, PiyoEmptyTeamException
 
 class RequestMethod(Enum):
     GET = auto()
@@ -33,13 +33,20 @@ class Client(object):
             reason = err.reason
             status_code = err.status
 
-            raise PiyoException(
+            raise PiyoHTTPException(
                 status_code,
                 reason,
                 -100,
             )
 
         return results
+    
+    def team_required(func):
+        def wrapper(self, *args, **kwargs):
+            if not self.current_team:
+                assert PiyoEmptyTeamException(func.__name__)
+            return func(self, *args, **kwargs)
+        return wrapper
     
     @property
     def access_token(self):
@@ -49,33 +56,40 @@ class Client(object):
         path = "/v1/teams"
         return self._request(RequestMethod.GET, path, params, headers)
 
+    @team_required
     def team(self, params={}, headers={}):
         path = "/v1/teams/{0}".format(self.current_team)
         return self._request(RequestMethod.GET, path, params, headers)
-    
+
+    @team_required
     def stats(self, params={}, headers={}):
         path = "/v1/teams/{0}/stats".format(self.current_team)
         return self._request(RequestMethod.GET, path, params, headers)
-    
+
+    @team_required
     def members(self, params={}, headers={}):
         path = "/v1/teams/{0}/members".format(self.current_team)
         return self._request(RequestMethod.GET, path, params, headers)
-    
+
+    @team_required
     def posts(self, params={}, headers={}):
         path = "/v1/teams/{0}/posts".format(self.current_team)
         return self._request(RequestMethod.GET, path, params, headers)
 
+    @team_required
     def post(self, post_number, params={}, headers={}):
         path = "/v1/teams/{0}/posts/{1}".format(self.current_team, post_number)
         return self._request(RequestMethod.GET, path, params, headers)
 
+    @team_required
     def comments(self, post_number=None, params={}, headers={}):
         if post_number:
             path = "/v1/teams/{0}/posts/{1}/comments".format(self.current_team, post_number)
         else:
             path = "/v1/teams/{0}/comments".format(self.current_team)
         return self._request(RequestMethod.GET, path, params, headers)
-    
+
+    @team_required
     def comment(self, comment_id, params={}, headers={}):
         path = "/v1/teams/{0}/comments/{1}".format(self.current_team, comment_id)
         return self._request(RequestMethod.GET, path, params, headers)
