@@ -23,15 +23,17 @@ class TestPostEndpoints(unittest.TestCase):
         self.assertEqual(response, expected)
 
     def test_post(self):
-        stub_name = "get_teams_{0}_posts_1".format(self.client.current_team)
-        response = self.client.post(1)
+        post_number = 1
+        stub_name = "get_teams_{0}_posts_{1}".format(self.client.current_team, post_number)
+        response = self.client.post(post_number)
         expected = get_stub_json(stub_name)
         self.assertTrue("name" in response)
         self.assertEqual(response, expected)
 
     def test_posts_comments(self):
-        response = self.client.comments(post_number=2)
-        stub_name = "get_teams_{0}_posts_2_comments".format(self.client.current_team)
+        post_number = 2
+        response = self.client.comments(post_number=post_number)
+        stub_name = "get_teams_{0}_posts_{1}_comments".format(self.client.current_team, post_number)
         expected = get_stub_json(stub_name)
         self.assertTrue("comments" in response)
         self.assertEqual(response, expected)
@@ -44,8 +46,61 @@ class TestPostEndpoints(unittest.TestCase):
         self.assertEqual(response, expected)
 
     def test_comment(self):
-        stub_name = "get_teams_{0}_comments_13".format(self.client.current_team)
-        response = self.client.comment(13)
+        comment_id = 13
+        stub_name = "get_teams_{0}_comments_{1}".format(self.client.current_team, comment_id)
+        response = self.client.comment(comment_id)
+        expected = get_stub_json(stub_name)
+        self.assertTrue("id" in response)
+        self.assertEqual(response, expected)
+
+    def test_post_stargazers(self):
+        post_number = 2312
+        stub_name = "get_teams_{0}_posts_{1}_stargazers".format(self.client.current_team, post_number)
+        response = self.client.post_stargazers(post_number)
+        expected = get_stub_json(stub_name)
+        self.assertTrue("stargazers" in response)
+        self.assertEqual(response, expected)
+
+    def test_comment_stargazers(self):
+        comment_id = 123
+        stub_name = "get_teams_{0}_comments_{1}_stargazers".format(self.client.current_team, comment_id)
+        response = self.client.comment_stargazers(comment_id)
+        expected = get_stub_json(stub_name)
+        self.assertTrue("stargazers" in response)
+        self.assertEqual(response, expected)
+
+    def test_watchers(self):
+        post_number = 2312
+        stub_name = "get_teams_{0}_posts_{1}_watchers".format(self.client.current_team, post_number)
+        response = self.client.watchers(post_number)
+        expected = get_stub_json(stub_name)
+        self.assertTrue("watchers" in response)
+        self.assertEqual(response, expected)
+
+    def test_invitation(self):
+        stub_name = "get_teams_{0}_invitation".format(self.client.current_team)
+        response = self.client.invitation()
+        expected = get_stub_json(stub_name)
+        self.assertTrue("url" in response)
+        self.assertEqual(response, expected)
+
+    def test_invitations(self):
+        stub_name = "get_teams_{0}_invitations".format(self.client.current_team)
+        response = self.client.invitations()
+        expected = get_stub_json(stub_name)
+        self.assertTrue("invitations" in response)
+        self.assertEqual(response, expected)
+
+    def test_invitations(self):
+        stub_name = "get_teams_{0}_emojis".format(self.client.current_team)
+        response = self.client.emojis()
+        expected = get_stub_json(stub_name)
+        self.assertTrue("emojis" in response)
+        self.assertEqual(response, expected)
+
+    def test_user(self):
+        stub_name = "get_user"
+        response = self.client.user()
         expected = get_stub_json(stub_name)
         self.assertTrue("id" in response)
         self.assertEqual(response, expected)
