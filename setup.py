@@ -7,6 +7,9 @@ def readme():
     with open('README.md', encoding='utf-8') as f:
         return f.read()
 
+def _requires_from_file(filename):
+    return open(filename).read().splitlines()
+
 setup(
     name='piyo',
     packages=['piyo'],
@@ -26,6 +29,7 @@ setup(
     long_description=readme(),
     long_description_content_type='text/markdown',
     keywords='esa api client esa.io python',
+    install_requires=_requires_from_file('requirements.txt'),
 
     classifiers=[
         'License :: OSI Approved :: MIT License',
