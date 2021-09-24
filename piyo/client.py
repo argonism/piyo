@@ -1,4 +1,4 @@
-import requests, os
+import requests, os, json
 from enum import Enum, auto
 from .error import PiyoException, PiyoEmptyTeamException
 
@@ -17,7 +17,7 @@ class Client(object):
     def _credential_header(self, access_token):
         return {"Authorization": "Bearer {0}".format(access_token)}
 
-    def _request(self, method, path, params={}, headers={}, with_auth=True):
+    def _request(self, method, path, params={}, headers={}, data={} datawith_auth=True):
         if with_auth: headers = dict(self._credential_header(self.access_token), **headers)
         url = "{0}{1}".format(self.api_endpoint, path)
         response = None
@@ -25,7 +25,7 @@ class Client(object):
             if method == RequestMethod.GET:
                 response = requests.get(url, params=params, headers=headers)
             if method == RequestMethod.POST:
-                response = requests.post(url, params=params, headers=headers)
+                response = requests.post(url, params=params, headers=headers, data=json.dumps(data))
 
             response.raise_for_status()
             results = response.json()
@@ -80,6 +80,11 @@ class Client(object):
     def post(self, post_number, params={}, headers={}):
         path = "/v1/teams/{0}/posts/{1}".format(self.current_team, post_number)
         return self._request(RequestMethod.GET, path, params, headers)
+    
+    @team_required
+    def create_post(self, data, params={}, headers={}):
+        path = "/v1/teams/{0}/posts".format(self.current_team)
+        return self._request(RequestMethod.POST, path, data=data, params, headers)
 
     @team_required
     def comments(self, post_number=None, params={}, headers={}):
@@ -95,14 +100,31 @@ class Client(object):
         return self._request(RequestMethod.GET, path, params, headers)
 
     @team_required
+    def create_comment(self, post_number, data, params={}, headers={}):
+        path = "/v1/teams/{0}/posts/{1}/comments".format(self.current_team, post_number)
+        return self._request(RequestMethod.POST, path, data=data, params, headers)
+
+    @team_required
     def post_stargazers(self, post_number, params={}, headers={}):
         path = "/v1/teams/{0}/posts/{1}/stargazers".format(self.current_team, post_number)
         return self._request(RequestMethod.GET, path, params, headers)
 
     @team_required
+    def add_post_star(self, post_number, data={}, params={}, headers={}):
+        path = "/v1/teams/{0}/posts/{1}/star".format(self.current_team, post_number)
+        return self._request(RequestMethod.POST, path, data=data, params, headers)
+
+    @team_required
     def comment_stargazers(self, comment_id, params={}, headers={}):
         path = "/v1/teams/{0}/comments/{1}/stargazers".format(self.current_team, comment_id)
         return self._request(RequestMethod.GET, path, params, headers)
+
+        return self._request(RequestMethod.POST, path, data=data, params, headers)
+
+    @team_required
+    def add_comment_star(self, comment_id, data={}, params={}, headers={}):
+        path = "/v1/teams/{0}/comments/{1}/star".format(self.current_team, comment_id)
+        return self._request(RequestMethod.POST, path, data=data, params, headers)
 
     @team_required
     def watchers(self, post_number, params={}, headers={}):
@@ -110,9 +132,29 @@ class Client(object):
         return self._request(RequestMethod.GET, path, params, headers)
 
     @team_required
+    def add_watch(self, post_number, params={}, headers={}):
+        path = "/v1/teams/{0}/posts/{1}/watch".format(self.current_team, post_number)
+        return self._request(RequestMethod.POST, path, params, headers)
+
+    @team_required
+    def batch_move(self, data, params={}, headers={}):
+        path = "/v1/teams/{0}/categories/batch_move".format(self.current_team)
+        return self._request(RequestMethod.POST, path, params, headers)
+
+    @team_required
     def invitation(self, params={}, headers={}):
         path = "/v1/teams/{0}/invitation".format(self.current_team)
         return self._request(RequestMethod.GET, path, params, headers)
+
+    @team_required
+    def regenerate_invitation(self, params={}, headers={}):
+        path = "/v1/teams/{0}/invitation_regenerator".format(self.current_team)
+        return self._request(RequestMethod.POST, path, params, headers)
+
+    @team_required
+    def send_invitation(self, data, params={}, headers={}):
+        path = "/v1/teams/{0}/invitations".format(self.current_team)
+        return self._request(RequestMethod.POST, path, params, headers, data=data)
 
     @team_required
     def invitations(self, params={}, headers={}):
@@ -123,6 +165,11 @@ class Client(object):
     def emojis(self, params={}, headers={}):
         path = "/v1/teams/{0}/emojis".format(self.current_team)
         return self._request(RequestMethod.GET, path, params, headers)
+
+    @team_required
+    def emojis(self, data, params={}, headers={}):
+        path = "/v1/teams/{0}/emojis".format(self.current_team)
+        return self._request(RequestMethod.POST, path, params, headers)
 
     def user(self, params={}, headers={}):
         path = "/v1/user"
