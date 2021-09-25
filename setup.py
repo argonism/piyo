@@ -14,11 +14,9 @@ setup(
     name='piyo',
     packages=['piyo'],
 
-    version='0.2.0',
+    version='0.3.0',
 
     license='MIT',
-
-    install_requires=['requests'],
 
     author='k-ush',
     author_email='argoooooon@gmail.com',
@@ -38,5 +36,6 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
     ],
 )
