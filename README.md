@@ -18,7 +18,7 @@ pip install piyo
 from piyo import Client
 
 client = Client(access_token='<access_token>', current_team='<team_name>')
-# Client will look up environment variables  access token
+# Client will look up environment variables ESA_ACCESS_TOKEN, so you can set access token to ESA_ACCESS_TOKEN instead of pass it to Client.
 
 client.user()
 #=> GET /v1/user
