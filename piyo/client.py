@@ -17,7 +17,7 @@ class Client(object):
     def _credential_header(self, access_token):
         return {"Authorization": "Bearer {0}".format(access_token)}
 
-    def _request(self, method, path, params={}, headers={}, data={} datawith_auth=True):
+    def _request(self, method, path, params={}, headers={}, data={}, with_auth=True):
         if with_auth: headers = dict(self._credential_header(self.access_token), **headers)
         url = "{0}{1}".format(self.api_endpoint, path)
         response = None
@@ -28,7 +28,12 @@ class Client(object):
                 response = requests.post(url, params=params, headers=headers, data=json.dumps(data))
 
             response.raise_for_status()
-            results = response.json()
+
+            if len(response.text) <= 0:
+                results = None
+            else:
+                results = response.json()
+
         except requests.exceptions.HTTPError as err:
             reason = err.reason
             status_code = err.status
@@ -84,7 +89,7 @@ class Client(object):
     @team_required
     def create_post(self, data, params={}, headers={}):
         path = "/v1/teams/{0}/posts".format(self.current_team)
-        return self._request(RequestMethod.POST, path, data=data, params, headers)
+        return self._request(RequestMethod.POST, path, params, headers, data=data)
 
     @team_required
     def comments(self, post_number=None, params={}, headers={}):
@@ -102,7 +107,7 @@ class Client(object):
     @team_required
     def create_comment(self, post_number, data, params={}, headers={}):
         path = "/v1/teams/{0}/posts/{1}/comments".format(self.current_team, post_number)
-        return self._request(RequestMethod.POST, path, data=data, params, headers)
+        return self._request(RequestMethod.POST, path, params, headers, data=data)
 
     @team_required
     def post_stargazers(self, post_number, params={}, headers={}):
@@ -112,19 +117,17 @@ class Client(object):
     @team_required
     def add_post_star(self, post_number, data={}, params={}, headers={}):
         path = "/v1/teams/{0}/posts/{1}/star".format(self.current_team, post_number)
-        return self._request(RequestMethod.POST, path, data=data, params, headers)
+        return self._request(RequestMethod.POST, path, params, headers, data=data)
 
     @team_required
     def comment_stargazers(self, comment_id, params={}, headers={}):
         path = "/v1/teams/{0}/comments/{1}/stargazers".format(self.current_team, comment_id)
         return self._request(RequestMethod.GET, path, params, headers)
 
-        return self._request(RequestMethod.POST, path, data=data, params, headers)
-
     @team_required
     def add_comment_star(self, comment_id, data={}, params={}, headers={}):
         path = "/v1/teams/{0}/comments/{1}/star".format(self.current_team, comment_id)
-        return self._request(RequestMethod.POST, path, data=data, params, headers)
+        return self._request(RequestMethod.POST, path, params, headers, data=data)
 
     @team_required
     def watchers(self, post_number, params={}, headers={}):
@@ -167,7 +170,7 @@ class Client(object):
         return self._request(RequestMethod.GET, path, params, headers)
 
     @team_required
-    def emojis(self, data, params={}, headers={}):
+    def create_emoji(self, data, params={}, headers={}):
         path = "/v1/teams/{0}/emojis".format(self.current_team)
         return self._request(RequestMethod.POST, path, params, headers)
 
