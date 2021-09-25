@@ -21,7 +21,11 @@ def get_script_dir():
 def get_stub_json(stub_name):
     path = os.path.join(get_script_dir(), "stubs", stub_name + ".json")
     with open(path) as f:
-        return json.load(f)
+        body = f.read()
+        if len(body) <= 0:
+            return None
+
+        return json.loads(body)
 
 class TestClient():
     def __init__(self, port, team="docs", api_endpoint="http://localhost"):
@@ -73,7 +77,6 @@ class StubHTTPRequestHandler(SimpleHTTPRequestHandler):
 
     def do_GET(self):
         self.path = self.path_to_filename()
-        # print("self.path:", self.path)
         f = self.send_head()
         if f:
             try:
@@ -82,7 +85,14 @@ class StubHTTPRequestHandler(SimpleHTTPRequestHandler):
                 f.close()
 
     def do_POST(self):
-        pass
+        self.path = self.path_to_filename()
+        print("self.path:", self.path)
+        f = self.send_head()
+        if f:
+            try:
+                self.copyfile(f, self.wfile)
+            finally:
+                f.close()
     
     def do_PATCH(self):
         pass

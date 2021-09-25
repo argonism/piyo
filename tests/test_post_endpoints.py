@@ -15,17 +15,30 @@ class TestPostEndpoints(unittest.TestCase):
         assert not self.client == None
         assert not self.client.api_endpoint == "https://api.esa.io"
     
-    def test_posts(self):
-        stub_name = "get_teams_{0}_posts".format(self.client.current_team)
-        response = self.client.posts()
-        expected = get_stub_json(stub_name)
-        self.assertTrue("posts" in response)
-        self.assertEqual(response, expected)
-
     def test_post(self):
         post_number = 1
         stub_name = "get_teams_{0}_posts_{1}".format(self.client.current_team, post_number)
         response = self.client.post(post_number)
+        expected = get_stub_json(stub_name)
+        self.assertTrue("name" in response)
+        self.assertEqual(response, expected)
+    
+    def test_create_post(self):
+        stub_name = "post_teams_{0}_posts".format(self.client.current_team)
+        data = {
+            "post":{
+                "name": "hi!",
+                "body_md": "# Getting Started\n",
+                "tags": [
+                        "api",
+                        "dev"
+                    ],
+                "category": "dev/2015/05/10",
+                "wip": False,
+                "message": "Add Getting Started section"
+            }
+        }
+        response = self.client.create_post(data)
         expected = get_stub_json(stub_name)
         self.assertTrue("name" in response)
         self.assertEqual(response, expected)
@@ -53,12 +66,28 @@ class TestPostEndpoints(unittest.TestCase):
         self.assertTrue("id" in response)
         self.assertEqual(response, expected)
 
+    def test_create_comment(self):
+        post_id = 2
+        data = {"comment":{"body_md":"LGTM!"}}
+        stub_name = "post_teams_{0}_posts_{1}_comments".format(self.client.current_team, post_id)
+        response = self.client.create_comment(post_id, data)
+        expected = get_stub_json(stub_name)
+        self.assertTrue("body_md" in response)
+        self.assertEqual(response["body_md"], "LGTM!")
+
     def test_post_stargazers(self):
         post_number = 2312
         stub_name = "get_teams_{0}_posts_{1}_stargazers".format(self.client.current_team, post_number)
         response = self.client.post_stargazers(post_number)
         expected = get_stub_json(stub_name)
         self.assertTrue("stargazers" in response)
+        self.assertEqual(response, expected)
+
+    def test_add_post_star(self):
+        post_id = 2312
+        stub_name = "post_teams_{0}_posts_{1}_star".format(self.client.current_team, post_id)
+        response = self.client.add_post_star(post_id)
+        expected = get_stub_json(stub_name)
         self.assertEqual(response, expected)
 
     def test_comment_stargazers(self):
@@ -69,6 +98,13 @@ class TestPostEndpoints(unittest.TestCase):
         self.assertTrue("stargazers" in response)
         self.assertEqual(response, expected)
 
+    def test_add_comment_star(self):
+        comment_id = 123
+        stub_name = "post_teams_{0}_comments_{1}_star".format(self.client.current_team, comment_id)
+        response = self.client.add_comment_star(comment_id)
+        expected = get_stub_json(stub_name)
+        self.assertEqual(response, expected)
+
     def test_watchers(self):
         post_number = 2312
         stub_name = "get_teams_{0}_posts_{1}_watchers".format(self.client.current_team, post_number)
@@ -77,9 +113,33 @@ class TestPostEndpoints(unittest.TestCase):
         self.assertTrue("watchers" in response)
         self.assertEqual(response, expected)
 
+    def test_add_watch(self):
+        post_number = 2312
+        stub_name = "post_teams_{0}_posts_{1}_watch".format(self.client.current_team, post_number)
+        response = self.client.add_watch(post_number)
+        expected = get_stub_json(stub_name)
+        self.assertEqual(response, expected)
+
+    def test_batch_move(self):
+        stub_name = "post_teams_{0}_categories_batch_move".format(self.client.current_team)
+        data = {
+            "from": "/foo/bar/",
+            "to": "/baz/"
+        }
+        response = self.client.batch_move(data)
+        expected = get_stub_json(stub_name)
+        self.assertEqual(response, expected)
+
     def test_invitation(self):
         stub_name = "get_teams_{0}_invitation".format(self.client.current_team)
         response = self.client.invitation()
+        expected = get_stub_json(stub_name)
+        self.assertTrue("url" in response)
+        self.assertEqual(response, expected)
+
+    def test_regenerate_invitation(self):
+        stub_name = "post_teams_{0}_invitation_regenerator".format(self.client.current_team)
+        response = self.client.regenerate_invitation()
         expected = get_stub_json(stub_name)
         self.assertTrue("url" in response)
         self.assertEqual(response, expected)
@@ -91,11 +151,36 @@ class TestPostEndpoints(unittest.TestCase):
         self.assertTrue("invitations" in response)
         self.assertEqual(response, expected)
 
-    def test_invitations(self):
+    def test_send_invitation(self):
+        stub_name = "post_teams_{0}_invitations".format(self.client.current_team)
+        data = {
+            "member": {
+                "emails": ["foo@example.com", "bar@example.com"]
+            }
+        }
+        response = self.client.send_invitation(data)
+        expected = get_stub_json(stub_name)
+        self.assertTrue("invitations" in response)
+        self.assertEqual(response, expected)
+
+    def test_emojis(self):
         stub_name = "get_teams_{0}_emojis".format(self.client.current_team)
         response = self.client.emojis()
         expected = get_stub_json(stub_name)
         self.assertTrue("emojis" in response)
+        self.assertEqual(response, expected)
+
+    def test_create_emoji(self):
+        stub_name = "post_teams_{0}_emojis".format(self.client.current_team)
+        data = {
+            "emoji": {
+                "code": "team_emoji",
+                "image": "..." # BASE64 String
+            }
+        }
+        response = self.client.create_emoji(data)
+        expected = get_stub_json(stub_name)
+        self.assertTrue("code" in response)
         self.assertEqual(response, expected)
 
     def test_user(self):
