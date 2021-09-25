@@ -41,19 +41,53 @@ client.posts()
 client.post(1)
 #=> GET /v1/teams/<team_name>/posts/1
 
+client.create_post({post: {name: "hi!"}})
+#=> POST /v1/teams/<team_name>/posts
+
 client.comments()
 #=> GET /v1/teams/<team_name>/comments
 
 client.comments(1)
 #=> GET /v1/teams/<team_name>/posts/1/comments
 
+client.create_comment(1, {"comment":{"body_md":"LGTM!"}})
+#=> POST /v1/teams/<team_name>/posts/1/comments
+
 client.comment(1)
 #=> GET /v1/teams/<team_name>/comments/1
+
+client.add_post_star(1)
+#=> POST /v1/teams/<team_name>/posts/1/star
 
 client.stargazers(1)
 #=> GET /v1/teams/<team_name>/posts/1/stargazers
 
-...
+client.add_comment_star(1)
+#=> POST /v1/teams/<team_name>/comment/1/star
+
+client.watchers(1)
+#=> POST /v1/teams/<team_name>/posts/1/watchers
+
+client.add_watch(1)
+#=> POST /v1/teams/<team_name>/posts/1/watch
+
+client.batch_move({})
+#=> POST /v1/teams/<team_name>/posts/1/watch
+
+client.regenerate_invitation()
+#=> POST /v1/teams/<team_name>/invitation_regenerator
+
+client.send_invitation({"member": {"emails": ["foo@example.com"]})
+#=> POST /v1/teams/<team_name>/invitations
+
+client.invitations()
+#=> GET /v1/teams/<team_name>/invitations
+
+client.emojis()
+#=> GET /v1/teams/<team_name>/emojis
+
+client.create_emoji({"emoji": {"code": "funny", "image": base64}})
+#=> POST /v1/teams/<team_name>/emojis
 
 ```
 
