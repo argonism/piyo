@@ -7,7 +7,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 import unittest
 
-from test_team_endpoints import TestTeamEndpoints
+from test_get_endpoints import TestGetEndpoints
 from test_post_endpoints import TestPostEndpoints
 from helper import StubServer, StubServerStatus, get_stub_json, load_env, TestClient
 

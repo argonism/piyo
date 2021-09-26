@@ -1,9 +1,11 @@
-import os, sys, json, time
+import os, sys, json, time, io
+from http import HTTPStatus
 from http.server import SimpleHTTPRequestHandler
 import socketserver
 from threading import Thread
 from enum import Enum, auto
 from piyo import Client
+
 
 def load_env():
     with open(".env") as f:
@@ -27,6 +29,12 @@ def get_stub_json(stub_name):
 
         return json.loads(body)
 
+def get_test_data(file_name):
+    path = os.path.join(get_script_dir(), "test_data", file_name + ".txt")
+    with open(path) as f:
+        requestline = f.readline().strip()
+        return requestline
+
 class TestClient():
     def __init__(self, port, team="docs", api_endpoint="http://localhost"):
         load_env()
@@ -38,11 +46,7 @@ class TestClient():
     @classmethod
     def get_instance(cls, *args, **kwargs):
         return cls._instance if hasattr(cls, "_instance") else None
-    
-    # @classmethod
-    # def set_instance(cls, *args, **kwargs):
-    #     cls._instance = Client(*args, **kwargs)
-    
+
     def start_server(self, timeout=3):
         self.server_thd = StubServer(self.port)
         self.server_thd.start()
@@ -63,6 +67,7 @@ class TestClient():
 
 
 class StubHTTPRequestHandler(SimpleHTTPRequestHandler):
+    timeout = 2
     def __init__(self, *args, directory=None, **kwargs):
         tests_dir = get_script_dir()
 
@@ -75,6 +80,11 @@ class StubHTTPRequestHandler(SimpleHTTPRequestHandler):
         stub_name = "{0}_{1}.json".format(self.command.lower(), stub_suffix)
         return stub_name
 
+    def read_body(self, fp):
+        content_len  = int(self.headers.get("content-length"))
+        line = fp.read(content_len)
+        return line.decode('iso-8859-1')
+
     def do_GET(self):
         self.path = self.path_to_filename()
         f = self.send_head()
@@ -86,8 +96,16 @@ class StubHTTPRequestHandler(SimpleHTTPRequestHandler):
 
     def do_POST(self):
         self.path = self.path_to_filename()
-        print("self.path:", self.path)
-        f = self.send_head()
+        self.request_body = self.read_body(self.rfile)
+        req_data = {
+            "requestline": self.requestline,
+            "headers": str(self.headers),
+            "body": self.request_body
+        }
+        response_body_bytes = json.dumps(req_data).encode()
+        content_len = len(response_body_bytes)
+        f = io.BytesIO(response_body_bytes)
+        self.send_post_head(content_len)
         if f:
             try:
                 self.copyfile(f, self.wfile)
@@ -99,6 +117,29 @@ class StubHTTPRequestHandler(SimpleHTTPRequestHandler):
     
     def do_DELETE(self):
         pass
+
+    def send_post_head(self, content_len):
+        path = self.translate_path(self.path)
+        ctype = "application/json"
+        try:
+            # Use browser cache if possible
+            if ("If-Modified-Since" in self.headers
+                    and "If-None-Match" not in self.headers):
+                # compare If-Modified-Since and time of last file modification
+                try:
+                    ims = email.utils.parsedate_to_datetime(
+                        self.headers["If-Modified-Since"])
+                except (TypeError, IndexError, OverflowError, ValueError):
+                    # ignore ill-formed values
+                    pass
+
+            self.send_response(HTTPStatus.OK)
+            self.send_header("Content-type", ctype)
+            self.send_header("Content-Length", content_len)
+            self.end_headers()
+            return
+        except:
+            raise
 
 
 class StubServerStatus(Enum):
