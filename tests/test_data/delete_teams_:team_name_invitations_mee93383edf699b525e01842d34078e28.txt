@@ -1,0 +1,1 @@
+DELETE /v1/teams/:team_name/invitations/mee93383edf699b525e01842d34078e28 HTTP/1.1

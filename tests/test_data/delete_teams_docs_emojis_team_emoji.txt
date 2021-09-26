@@ -1,0 +1,1 @@
+DELETE /v1/teams/docs/emojis/team_emoji HTTP/1.1

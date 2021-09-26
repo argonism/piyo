@@ -1,0 +1,1 @@
+DELETE /v1/teams/docs/members/alice HTTP/1.1

@@ -1,0 +1,23 @@
+GET /v1/teams/:team_name/invitations HTTP/1.1
+{
+    "invitations": [
+        {
+            "email": "foo@example.com",
+            "code": "mee93383edf699b525e01842d34078e28",
+            "expires_at": "2017-08-17T12:00:41+09:00",
+            "url": "https://docs.esa.io/team/invitations/mee93383edf699b525e01842d34078e28/join"
+        },
+        {
+            "email": "bar@example.com",
+            "code": "mc542eed211a8e4f1db6ccccb14fcda9d",
+            "expires_at": "2017-08-17T12:00:44+09:00",
+            "url": "https://docs.esa.io/team/invitations/mc542eed211a8e4f1db6ccccb14fcda9d/join"
+        }
+    ],
+    "prev_page": null,
+    "next_page": null,
+    "total_count": 2,
+    "page": 1,
+    "per_page": 20,
+    "max_per_page": 100
+}

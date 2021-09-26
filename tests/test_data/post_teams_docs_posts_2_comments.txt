@@ -1,0 +1,17 @@
+POST /v1/teams/docs/posts/2/comments HTTP/1.1
+{
+  "id": 22767,
+  "body_md": "LGTM!",
+  "body_html": "&lt;p&gt;LGTM!&lt;/p&gt;\n",
+  "created_at": "2015-06-21T19:36:20+09:00",
+  "updated_at": "2015-06-21T19:36:20+09:00",
+  "url": "https://docs.esa.io/posts/2#comment-22767",
+  "created_by": {
+    "myself": true,
+    "name": "Atsuo Fukaya",
+    "screen_name": "fukayatsu",
+    "icon": "https://img.esa.io/uploads/production/users/1/icon/thumb_m_402685a258cf2a33c1d6c13a89adec92.png"
+  },
+  "stargazers_count": 0,
+  "star": false
+}

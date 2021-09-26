@@ -1,0 +1,17 @@
+POST /v1/teams/docs/invitations HTTP/1.1
+{
+    "invitations": [
+        {
+            "email": "foo@example.com",
+            "code": "mee93383edf699b525e01842d34078e28",
+            "expires_at": "2017-08-17T12:00:41+09:00",
+            "url": "https://docs.esa.io/team/invitations/mee93383edf699b525e01842d34078e28/join"
+        },
+        {
+            "email": "bar@example.com",
+            "code": "m934f1f60732f49d50ee5b3f96841ff13",
+            "expires_at": "2017-08-17T12:00:41+09:00",
+            "url": "https://docs.esa.io/team/invitations/m934f1f60732f49d50ee5b3f96841ff13/join"
+        }
+    ]
+}

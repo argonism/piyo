@@ -1,0 +1,6 @@
+POST /v1/teams/docs/categories/batch_move HTTP/1.1
+{
+  "count": 3,
+  "from": "/foo/bar/",
+  "to": "/baz/"
+}

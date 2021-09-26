@@ -1,0 +1,4 @@
+GET /v1/teams/docs/invitation HTTP/1.1
+{
+  "url": "https://docs.esa.io/team/invitations/member-c05d112fa34870998ab4da1e98846ae3"
+}
