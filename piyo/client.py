@@ -25,11 +25,11 @@ class Client(object):
             if method == RequestMethod.GET:
                 response = requests.get(url, params=params, headers=headers)
             elif method == RequestMethod.POST:
-                response = requests.post(url, params=params, headers=headers, data=json.dumps(data))
+                response = requests.post(url, params=params, headers=headers, json=data)
             elif method == RequestMethod.PATCH:
-                response = requests.patch(url, params=params, headers=headers, data=json.dumps(data))
+                response = requests.patch(url, params=params, headers=headers, json=data)
             elif method == RequestMethod.DELETE:
-                response = requests.delete(url, params=params, headers=headers, data=json.dumps(data))
+                response = requests.delete(url, params=params, headers=headers, json=data)
             else:
                 raise PiyoNotImplementedException(method)
 
