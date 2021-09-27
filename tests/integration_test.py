@@ -9,7 +9,8 @@ import unittest
 
 from test_get_endpoints import TestGetEndpoints
 from test_post_endpoints import TestPostEndpoints
-from test_patch_endpoints import TestPostEndpoints
+from test_patch_endpoints import TestPatchEndpoints
+from test_delete_endpoints import TestDeleteEndpoints
 from helper import StubServer, StubServerStatus, get_stub_json, load_env, TestClient
 
 

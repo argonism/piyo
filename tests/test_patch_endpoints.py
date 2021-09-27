@@ -9,7 +9,7 @@ import unittest
 
 from helper import StubServer, StubServerStatus, get_test_data, load_env, TestClient
 
-class TestPostEndpoints(unittest.TestCase):
+class TestPatchEndpoints(unittest.TestCase):
     def setUp(self):
         self.client = TestClient.get_instance()
         assert not self.client == None
