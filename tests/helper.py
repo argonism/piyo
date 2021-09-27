@@ -113,10 +113,10 @@ class StubHTTPRequestHandler(SimpleHTTPRequestHandler):
                 f.close()
     
     def do_PATCH(self):
-        pass
+        self.do_POST()
     
     def do_DELETE(self):
-        pass
+        self.do_POST()
 
     def send_post_head(self, content_len):
         path = self.translate_path(self.path)
