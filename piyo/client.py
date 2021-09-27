@@ -1,12 +1,12 @@
 import requests, os, json
 from enum import Enum, auto
-from .error import PiyoException, PiyoEmptyTeamException
+from .error import PiyoException, PiyoEmptyTeamException, PiyoNotImplementedException
 
 class RequestMethod(Enum):
-    GET = auto()
-    POST = auto()
-    PATHC = auto()
-    DELETE = auto()
+    GET = 1
+    POST = 2
+    PATCH = 3
+    DELETE = 4
 
 class Client(object):
     def __init__(self, access_token="", current_team="", api_endpoint="https://api.esa.io"):
@@ -24,8 +24,14 @@ class Client(object):
         try:
             if method == RequestMethod.GET:
                 response = requests.get(url, params=params, headers=headers)
-            if method == RequestMethod.POST:
+            elif method == RequestMethod.POST:
                 response = requests.post(url, params=params, headers=headers, data=json.dumps(data))
+            elif method == RequestMethod.PATCH:
+                response = requests.patch(url, params=params, headers=headers, data=json.dumps(data))
+            elif method == RequestMethod.DELETE:
+                response = requests.delete(url, params=params, headers=headers, data=json.dumps(data))
+            else:
+                raise PiyoNotImplementedException(method)
 
             response.raise_for_status()
 
@@ -90,6 +96,11 @@ class Client(object):
     def create_post(self, data, params={}, headers={}):
         path = "/v1/teams/{0}/posts".format(self.current_team)
         return self._request(RequestMethod.POST, path, params, headers, data=data)
+    
+    @team_required
+    def update_post(self, post_number, data, params={}, headers={}):
+        path = "/v1/teams/{0}/posts/{1}".format(self.current_team, post_number)
+        return self._request(RequestMethod.PATCH, path, params, headers, data=data)
 
     @team_required
     def comments(self, post_number=None, params={}, headers={}):
@@ -108,6 +119,11 @@ class Client(object):
     def create_comment(self, post_number, data, params={}, headers={}):
         path = "/v1/teams/{0}/posts/{1}/comments".format(self.current_team, post_number)
         return self._request(RequestMethod.POST, path, params, headers, data=data)
+
+    @team_required
+    def update_comment(self, comment_id, data, params={}, headers={}):
+        path = "/v1/teams/{0}/comments/{1}".format(self.current_team, comment_id)
+        return self._request(RequestMethod.PATCH, path, params, headers, data=data)
 
     @team_required
     def post_stargazers(self, post_number, params={}, headers={}):

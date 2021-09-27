@@ -22,3 +22,10 @@ class PiyoEmptyTeamException(PiyoException):
     
     def __str__(self):
         return "PiyoTeamRequiredException: {0} at {1}".format(self.msg, self.func_name)
+
+class PiyoNotImplementedException(PiyoException):
+    def __init__(self, name):
+        self.msg = f"{0} not implemented".format(name)
+
+    def __str__(self):
+        return "PiyoNotImplementedException: {0}".format(self.msg)
