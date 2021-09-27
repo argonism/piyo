@@ -83,6 +83,11 @@ class Client(object):
         return self._request(RequestMethod.GET, path, params, headers)
 
     @team_required
+    def delete_member(self, screen_name, params={}, headers={}):
+        path = "/v1/teams/{0}/members/{1}".format(self.current_team, screen_name)
+        return self._request(RequestMethod.DELETE, path, params, headers)
+
+    @team_required
     def posts(self, params={}, headers={}):
         path = "/v1/teams/{0}/posts".format(self.current_team)
         return self._request(RequestMethod.GET, path, params, headers)
@@ -101,6 +106,11 @@ class Client(object):
     def update_post(self, post_number, data, params={}, headers={}):
         path = "/v1/teams/{0}/posts/{1}".format(self.current_team, post_number)
         return self._request(RequestMethod.PATCH, path, params, headers, data=data)
+    
+    @team_required
+    def delete_post(self, post_number, params={}, headers={}):
+        path = "/v1/teams/{0}/posts/{1}".format(self.current_team, post_number)
+        return self._request(RequestMethod.DELETE, path, params, headers)
 
     @team_required
     def comments(self, post_number=None, params={}, headers={}):
@@ -126,6 +136,11 @@ class Client(object):
         return self._request(RequestMethod.PATCH, path, params, headers, data=data)
 
     @team_required
+    def delete_comment(self, comment_id, params={}, headers={}):
+        path = "/v1/teams/{0}/comments/{1}".format(self.current_team, comment_id)
+        return self._request(RequestMethod.DELETE, path, params, headers)
+
+    @team_required
     def post_stargazers(self, post_number, params={}, headers={}):
         path = "/v1/teams/{0}/posts/{1}/stargazers".format(self.current_team, post_number)
         return self._request(RequestMethod.GET, path, params, headers)
@@ -134,6 +149,11 @@ class Client(object):
     def add_post_star(self, post_number, data={}, params={}, headers={}):
         path = "/v1/teams/{0}/posts/{1}/star".format(self.current_team, post_number)
         return self._request(RequestMethod.POST, path, params, headers, data=data)
+
+    @team_required
+    def delete_post_star(self, post_number, params={}, headers={}):
+        path = "/v1/teams/{0}/posts/{1}/star".format(self.current_team, post_number)
+        return self._request(RequestMethod.DELETE, path, params, headers)    
 
     @team_required
     def comment_stargazers(self, comment_id, params={}, headers={}):
@@ -146,6 +166,11 @@ class Client(object):
         return self._request(RequestMethod.POST, path, params, headers, data=data)
 
     @team_required
+    def delete_comment_star(self, comment_id, params={}, headers={}):
+        path = "/v1/teams/{0}/comments/{1}/star".format(self.current_team, comment_id)
+        return self._request(RequestMethod.DELETE, path, params, headers)
+
+    @team_required
     def watchers(self, post_number, params={}, headers={}):
         path = "/v1/teams/{0}/posts/{1}/watchers".format(self.current_team, post_number)
         return self._request(RequestMethod.GET, path, params, headers)
@@ -154,6 +179,11 @@ class Client(object):
     def add_watch(self, post_number, params={}, headers={}):
         path = "/v1/teams/{0}/posts/{1}/watch".format(self.current_team, post_number)
         return self._request(RequestMethod.POST, path, params, headers)
+
+    @team_required
+    def delete_watch(self, post_number, params={}, headers={}):
+        path = "/v1/teams/{0}/posts/{1}/watch".format(self.current_team, post_number)
+        return self._request(RequestMethod.DELETE, path, params, headers)
 
     @team_required
     def batch_move(self, data, params={}, headers={}):
@@ -176,6 +206,11 @@ class Client(object):
         return self._request(RequestMethod.POST, path, params, headers, data=data)
 
     @team_required
+    def delete_invitation(self, code, params={}, headers={}):
+        path = "/v1/teams/{0}/invitations/{1}".format(self.current_team, code)
+        return self._request(RequestMethod.DELETE, path, params, headers)
+
+    @team_required
     def invitations(self, params={}, headers={}):
         path = "/v1/teams/{0}/invitations".format(self.current_team)
         return self._request(RequestMethod.GET, path, params, headers)
@@ -189,6 +224,11 @@ class Client(object):
     def create_emoji(self, data, params={}, headers={}):
         path = "/v1/teams/{0}/emojis".format(self.current_team)
         return self._request(RequestMethod.POST, path, params, headers)
+
+    @team_required
+    def delete_emoji(self, code, params={}, headers={}):
+        path = "/v1/teams/{0}/emojis/{1}".format(self.current_team, code)
+        return self._request(RequestMethod.DELETE, path, params, headers)
 
     def user(self, params={}, headers={}):
         path = "/v1/user"
