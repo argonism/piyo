@@ -1,6 +1,6 @@
 import requests, os, json
 from enum import Enum, auto
-from .error import PiyoException, PiyoEmptyTeamException, PiyoNotImplementedException
+from .error import PiyoException, PiyoEmptyTeamException, PiyoNotImplementedException, PiyoHTTPException
 
 class RequestMethod(Enum):
     GET = 1
@@ -88,8 +88,12 @@ class Client(object):
         return self._request(RequestMethod.DELETE, path, params, headers)
 
     @team_required
-    def posts(self, params={}, headers={}):
+    def posts(self, keywords=[], search_options={}, params={}, headers={}):
         path = "/v1/teams/{0}/posts".format(self.current_team)
+        if len(search_options) > 0:
+            options = [f"{str(k)}: {str(v)}" for k, v in search_options.items()]
+            q_param = " ".join([str(k) for k in keywords] + options)
+            params["q"] = q_param
         return self._request(RequestMethod.GET, path, params, headers)
 
     @team_required
@@ -237,5 +241,5 @@ class Client(object):
 
 if __name__ == "__main__":
     client = Client(os.environ["ESA_TEST_TEAM"])
-    res = client.teams()
+    res = client.stats()
     print(res)

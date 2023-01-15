@@ -8,6 +8,27 @@ install this library using pip
 pip install piyo
 ```
 
+## Usage By purpose
+
+### Preparation
+
+```python
+from piyo import Client
+
+client = Client(access_token='<access_token>', current_team='<team_name>')
+``` 
+
+### Search article
+# https://docs.esa.io/posts/102#%E8%A8%98%E4%BA%8B
+
+``` python
+keywords = ["diary", "secret"]
+search_options = {
+    "sort": "created"
+}
+posts = client.posts(keywords=keywords, search_options=search_options)
+``` 
+
 ## Usage
 
 ``` python
@@ -35,7 +56,7 @@ client.members()
 client.delete_member()
 #=> DELETE /v1/teams/<team_name>/members/1
 
-client.posts()
+client.posts(keywords=["diary secret"], search_options={"sort": "created"})
 #=> GET /v1/teams/<team_name>/posts
 
 client.post(1)
