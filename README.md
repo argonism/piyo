@@ -3,7 +3,8 @@ esa API v1 client library, written in Python
 
 ## Installation
 
-install this library using pip
+Install this library using pip from [PyPI](https://pypi.org/project/piyo/)
+
 ``` shell
 pip install piyo
 ```
@@ -19,7 +20,10 @@ client = Client(access_token='<access_token>', current_team='<team_name>')
 ``` 
 
 ### Search article
-# https://docs.esa.io/posts/102#%E8%A8%98%E4%BA%8B
+
+Set search keywords and options.
+
+See official documents for details: https://docs.esa.io/posts/102#%E8%A8%98%E4%BA%8B
 
 ``` python
 keywords = ["diary", "secret"]
