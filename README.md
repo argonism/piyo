@@ -1,6 +1,10 @@
 # 🐣 piyo
 esa API v1 client library, written in Python
 
+[![Downloads](https://static.pepy.tech/badge/piyo)](https://pepy.tech/project/piyo)
+[![Downloads](https://static.pepy.tech/badge/piyo/month)](https://pepy.tech/project/piyo)
+[![Downloads](https://static.pepy.tech/badge/piyo/week)](https://pepy.tech/project/piyo)
+
 ## Installation
 
 Install this library using pip from [PyPI](https://pypi.org/project/piyo/)
