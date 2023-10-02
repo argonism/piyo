@@ -14,7 +14,7 @@ setup(
     name='piyo',
     packages=['piyo'],
 
-    version='1.0.0',
+    version='1.0.4',
 
     license='MIT',
 
