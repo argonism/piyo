@@ -1,4 +1,5 @@
 import requests, os, json
+import mimetypes
 from pathlib import Path
 from enum import Enum, auto
 from .error import PiyoException, PiyoEmptyTeamException, PiyoNotImplementedException, PiyoHTTPException
@@ -237,6 +238,29 @@ class Client(object):
     def delete_emoji(self, code, params={}, headers={}):
         path = "/v1/teams/{0}/emojis/{1}".format(self.current_team, code)
         return self._request_to_esa(RequestMethod.DELETE, path, params, headers)
+
+    @team_required
+    def upload_file(self, file_path, mine_type=None, params={}, headers={}):
+        file_path = Path(file_path)
+        mine_type = mine_type or mimetypes.guess_type(file_path)[0]
+        params = {
+            "type": mine_type,
+            "size": file_path.stat().st_size,
+            "name": file_path.name,
+        }
+        path = f"/v1/teams/{self.current_team}/attachments/policies"
+        response = self._request_to_esa(RequestMethod.POST, path, params, headers)
+
+        s3_endpoint = response["attachment"]["endpoint"]
+        attachment_url = response["attachment"]["url"]
+        form_data = response["form"]
+        _file = {'file': open(file_path, 'rb')}
+
+        response = requests.post(s3_endpoint, data=form_data, files=_file)
+
+        response.raise_for_status()
+
+        return attachment_url
 
     def user(self, params={}, headers={}):
         path = "/v1/user"
