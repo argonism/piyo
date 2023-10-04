@@ -1,3 +1,4 @@
+import warnings
 import requests, os, json
 import mimetypes
 from pathlib import Path
@@ -243,6 +244,9 @@ class Client(object):
     def upload_file(self, file_path, mine_type=None, params={}, headers={}):
         file_path = Path(file_path)
         mine_type = mine_type or mimetypes.guess_type(file_path)[0]
+        if mine_type is None:
+            warnings.warn("mine_type is None. use application/octet-stream")
+            mine_type = "application/octet-stream"
         params = {
             "type": mine_type,
             "size": file_path.stat().st_size,
