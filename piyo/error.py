@@ -5,9 +5,9 @@ class PiyoException(Exception):
 class PiyoHTTPException(PiyoException):
 
     def __init__(self, http_code, reason, error_code):
-        super().___init__()
+        super().__init__()
         self.http_code = http_code
-        self.msg = reason
+        self.reason = reason
         self.error_code = error_code
 
     def __str__(self):

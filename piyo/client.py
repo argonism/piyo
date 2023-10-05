@@ -1,9 +1,10 @@
 import warnings
-import requests, os, json
+import requests
+import os
 import mimetypes
 from pathlib import Path
-from enum import Enum, auto
-from .error import PiyoException, PiyoEmptyTeamException, PiyoNotImplementedException, PiyoHTTPException
+from enum import Enum
+from .error import PiyoEmptyTeamException, PiyoNotImplementedException, PiyoHTTPException
 
 class RequestMethod(Enum):
     GET = 1
@@ -42,8 +43,8 @@ class Client(object):
                 results = response.json()
 
         except requests.exceptions.HTTPError as err:
-            reason = err.reason
-            status_code = err.status
+            reason = err.response.reason
+            status_code = err.response.status_code
 
             raise PiyoHTTPException(
                 status_code,
